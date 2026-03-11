@@ -1,12 +1,43 @@
 const express = require("express")
 const router = express.Router()
+const User = require("../models/user")
+const bcrypt = require("bcryptjs")
 
-const authController = require("../controllers/authController")
+router.post("/register", async(req,res)=>{
 
-// Register user
-router.post("/register", authController.register)
+const {name,email,password} = req.body
 
-// Login user
-router.post("/login", authController.login)
+const hashedPassword = await bcrypt.hash(password,10)
+
+const user = new User({
+name,
+email,
+password:hashedPassword
+})
+
+await user.save()
+
+res.json({message:"User registered"})
+
+})
+
+router.post("/login", async(req,res)=>{
+
+const {email,password} = req.body
+
+const user = await User.findOne({email})
+
+if(!user) return res.status(400).json("User not found")
+
+const match = await bcrypt.compare(password,user.password)
+
+if(!match) return res.status(400).json("Invalid password")
+
+res.json({
+userId:user._id,
+name:user.name
+})
+
+})
 
 module.exports = router

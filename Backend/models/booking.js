@@ -4,9 +4,8 @@ const bookingSchema = new mongoose.Schema({
 
 userId:String,
 providerId:String,
-serviceId:String,
+service:String,
 date:String,
-timeSlot:String,
 status:String
 
 })

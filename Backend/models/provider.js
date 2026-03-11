@@ -1,37 +1,15 @@
 const mongoose = require("mongoose")
 
-const ProviderSchema = new mongoose.Schema({
+const providerSchema = new mongoose.Schema({
 
-name:{
-type:String,
-required:true
-},
-
-userId:{
-type:String,
-required:true
-},
-
-serviceId:{
-type:String,
-default:""
-},
-
-location:{
-type:String,
-default:""
-},
-
-phone:{
-type:String,
-default:""
-},
-
-rating: Number,
-experience: String,
-image: String,
-description: String
+name:String,
+serviceId:String,
+service:String,
+location:String,
+rating:Number,
+experience:Number,
+description:String
 
 })
 
-module.exports = mongoose.model("Provider",ProviderSchema)
+module.exports = mongoose.model("Provider",providerSchema)
