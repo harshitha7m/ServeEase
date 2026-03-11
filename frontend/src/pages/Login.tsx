@@ -12,7 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const thandleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
   };
 
