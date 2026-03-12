@@ -1,7 +1,4 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
-
 import {
   ArrowLeft,
   MapPin,
@@ -12,10 +9,10 @@ import {
   Calendar,
   MessageSquare,
 } from "lucide-react";
-
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+import { mockProviders } from "@/data/providers";
 
 /* ---------------- TYPES ---------------- */
 
@@ -27,17 +24,6 @@ interface RatingDistribution {
   one?: number;
 }
 
-interface Provider {
-  _id: string;
-  name: string;
-  service: string;
-  location: string;
-  phone: string;
-  description: string;
-  verified: boolean;
-  ratings?: RatingDistribution;
-}
-
 interface Review {
   id: string;
   user: string;
@@ -46,25 +32,21 @@ interface Review {
   date: string;
 }
 
-/* ---------------- UTIL FUNCTIONS ---------------- */
+/* ---------------- UTILITY FUNCTIONS ---------------- */
 
-const totalRatings = (r?: RatingDistribution) =>
-  (r?.five || 0) +
-  (r?.four || 0) +
-  (r?.three || 0) +
-  (r?.two || 0) +
-  (r?.one || 0);
+const totalRatings = (r: RatingDistribution) =>
+  (r?.five || 0) + (r?.four || 0) + (r?.three || 0) + (r?.two || 0) + (r?.one || 0);
 
 const avgRating = (r?: RatingDistribution) => {
   const total = totalRatings(r);
   if (total === 0) return 0;
 
   return (
-    ((r?.five || 0) * 5 +
-      (r?.four || 0) * 4 +
-      (r?.three || 0) * 3 +
-      (r?.two || 0) * 2 +
-      (r?.one || 0)) / total
+    (r.five * 5 +
+      r.four * 4 +
+      r.three * 3 +
+      r.two * 2 +
+      r.one * 1) / total
   );
 };
 
@@ -72,24 +54,27 @@ const avgRating = (r?: RatingDistribution) => {
 
 const mockReviews: Review[] = [
   {
-    id: "1",
-    user: "Anita M",
+    id: "r1",
+    user: "Anita M.",
     rating: 5,
-    comment: "Excellent service! Very professional.",
+    comment:
+      "Excellent work! Very professional and on time. Would definitely recommend.",
     date: "2026-03-01",
   },
   {
-    id: "2",
-    user: "Suresh K",
+    id: "r2",
+    user: "Suresh K.",
     rating: 4,
-    comment: "Good service and reasonable price.",
+    comment:
+      "Good service overall. Pricing was fair and transparent.",
     date: "2026-02-20",
   },
   {
-    id: "3",
-    user: "Priya S",
+    id: "r3",
+    user: "Priya S.",
     rating: 5,
-    comment: "Very skilled and friendly.",
+    comment:
+      "Very skilled and courteous. Fixed the issue quickly.",
     date: "2026-02-15",
   },
 ];
@@ -100,16 +85,9 @@ const ProviderDetails = () => {
   const { providerId } = useParams();
   const navigate = useNavigate();
 
-  const [provider, setProvider] = useState<Provider | null>(null);
+  const provider = mockProviders.find((p) => p._id === providerId);
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/providers/${providerId}`)
-      .then((res) => {
-        setProvider(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, [providerId]);
+  /* ----------- PROVIDER NOT FOUND ----------- */
 
   if (!provider) {
     return (
@@ -121,7 +99,9 @@ const ProviderDetails = () => {
             <ShieldCheck className="h-7 w-7 text-muted-foreground" />
           </div>
 
-          <h1 className="text-2xl font-bold">Provider not found</h1>
+          <h1 className="text-2xl font-bold">
+            Provider not found
+          </h1>
 
           <Button
             variant="outline"
@@ -147,8 +127,15 @@ const ProviderDetails = () => {
 
         {/* BACK BUTTON */}
 
-        <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}>
-          <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
+        <motion.div
+          initial={{ opacity: 0, x: -8 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="gap-2"
+          >
             <ArrowLeft className="h-4 w-4" />
             Back
           </Button>
@@ -159,11 +146,11 @@ const ProviderDetails = () => {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-card border rounded-xl p-6 shadow-card space-y-6"
+          className="bg-card border border-border rounded-xl p-6 shadow-card space-y-6"
         >
           <div className="flex flex-col sm:flex-row justify-between gap-4">
 
-            {/* LEFT SIDE */}
+            {/* LEFT */}
 
             <div className="flex items-center gap-3">
 
@@ -175,7 +162,9 @@ const ProviderDetails = () => {
 
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold">{provider.name}</h1>
+                  <h1 className="text-2xl font-bold">
+                    {provider.name}
+                  </h1>
 
                   {provider.verified && (
                     <span className="flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-1 rounded-md">
@@ -194,10 +183,12 @@ const ProviderDetails = () => {
             {/* RATING */}
 
             <div className="text-right">
-              <div className="text-4xl font-bold">{avg.toFixed(1)}</div>
+              <div className="text-4xl font-bold">
+                {avg.toFixed(1)}
+              </div>
 
               <div className="flex justify-end">
-                {[1,2,3,4,5].map((s) => (
+                {[1, 2, 3, 4, 5].map((s) => (
                   <Star
                     key={s}
                     className={`h-4 w-4 ${
@@ -213,10 +204,11 @@ const ProviderDetails = () => {
                 {total} reviews
               </p>
             </div>
-
           </div>
 
-          <p className="text-muted-foreground">{provider.description}</p>
+          <p className="text-muted-foreground">
+            {provider.description}
+          </p>
 
           {/* INFO */}
 
@@ -236,15 +228,15 @@ const ProviderDetails = () => {
               <Clock className="h-4 w-4 text-primary" />
               Mon–Sat, 9 AM – 6 PM
             </div>
-
           </div>
 
-          {/* BUTTONS */}
+          {/* ACTION BUTTONS */}
 
           <div className="flex gap-3 pt-2">
-
             <Button
-              onClick={() => navigate(`/booking/${provider._id}`)}
+              onClick={() =>
+                navigate(`/booking/${provider._id}`)
+              }
               className="gap-2"
             >
               <Calendar className="h-4 w-4" />
@@ -255,8 +247,61 @@ const ProviderDetails = () => {
               <Phone className="h-4 w-4" />
               Call Now
             </Button>
-
           </div>
+        </motion.div>
+
+        {/* RATING BREAKDOWN */}
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-card border border-border rounded-xl p-6 shadow-card space-y-4"
+        >
+          <h2 className="text-lg font-semibold">
+            Rating Breakdown
+          </h2>
+
+          {[5, 4, 3, 2, 1].map((stars) => {
+            const count =
+              stars === 5
+                ? provider.ratings.five
+                : stars === 4
+                ? provider.ratings.four
+                : stars === 3
+                ? provider.ratings.three
+                : stars === 2
+                ? provider.ratings.two
+                : provider.ratings.one;
+
+            return (
+              <div
+                key={stars}
+                className="flex items-center gap-3 text-sm"
+              >
+                <span className="w-4">{stars}</span>
+
+                <Star className="h-3 w-3 text-primary fill-primary" />
+
+                <div className="flex-1 bg-muted h-2 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{
+                      width: `${
+                        total > 0
+                          ? (count / total) * 100
+                          : 0
+                      }%`,
+                    }}
+                    className="bg-primary h-full"
+                  />
+                </div>
+
+                <span className="w-8 text-right">
+                  {count}
+                </span>
+              </div>
+            );
+          })}
         </motion.div>
 
         {/* REVIEWS */}
@@ -274,12 +319,14 @@ const ProviderDetails = () => {
           {mockReviews.map((review) => (
             <div
               key={review.id}
-              className="bg-card border rounded-xl p-5 shadow-card space-y-2"
+              className="bg-card border border-border rounded-xl p-5 shadow-card space-y-2"
             >
               <div className="flex justify-between items-center">
 
                 <div>
-                  <p className="font-semibold">{review.user}</p>
+                  <p className="font-semibold">
+                    {review.user}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {review.date}
                   </p>
@@ -297,13 +344,11 @@ const ProviderDetails = () => {
                     />
                   ))}
                 </div>
-
               </div>
 
               <p className="text-sm text-muted-foreground">
                 {review.comment}
               </p>
-
             </div>
           ))}
         </motion.div>
