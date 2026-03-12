@@ -1,16 +1,20 @@
 const express = require("express")
 const router = express.Router()
 
-const Provider = require("../models/Provider")
+const Provider = require("../models/provider")
 
-router.get("/:serviceId", async(req,res)=>{
+// get providers by service
 
-const providers = await Provider.find({
-serviceId:req.params.serviceId
-})
+router.get("/:service", async (req, res) => {
+  try {
+    const service = decodeURIComponent(req.params.service)
 
-res.json(providers)
+    const providers = await Provider.find({ service })
 
+    res.json(providers)
+  } catch (err) {
+    res.status(500).json(err)
+  }
 })
 
 module.exports = router

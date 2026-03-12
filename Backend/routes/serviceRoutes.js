@@ -3,11 +3,21 @@ const router = express.Router()
 
 const Service = require("../models/service")
 
+// get all services
+
 router.get("/", async(req,res)=>{
 
-const services = await Service.find()
+  try{
 
-res.json(services)
+    const services = await Service.find()
+
+    res.json(services)
+
+  }catch(err){
+
+    res.status(500).json(err)
+
+  }
 
 })
 

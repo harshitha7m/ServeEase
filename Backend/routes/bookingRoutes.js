@@ -1,25 +1,23 @@
 const express = require("express")
 const router = express.Router()
 
-const Booking = require("../models/Booking")
+const Booking = require("../models/booking")
 
 router.post("/", async(req,res)=>{
 
-const booking = new Booking(req.body)
+  try{
 
-await booking.save()
+    const booking = new Booking(req.body)
 
-res.json({message:"Booking created"})
+    await booking.save()
 
-})
+    res.json({message:"Booking successful"})
 
-router.get("/:userId", async(req,res)=>{
+  }catch(err){
 
-const bookings = await Booking.find({
-userId:req.params.userId
-})
+    res.status(500).json(err)
 
-res.json(bookings)
+  }
 
 })
 

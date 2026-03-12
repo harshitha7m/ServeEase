@@ -12,6 +12,7 @@ import Providers from "./pages/Providers.tsx";
 import ProviderDetails from "./pages/ProviderDetails.tsx";
 import Services from "./pages/Services.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import ProvidersList from "./pages/ProvidersList";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/provider/:providerId" element={<ProviderDetails />} />
           <Route path="/services" element={<Services />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/providers/:serviceName" element={<ProvidersList />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

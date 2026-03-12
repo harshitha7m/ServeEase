@@ -1,15 +1,34 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const providerSchema = new mongoose.Schema({
 
-name:String,
-serviceId:String,
-service:String,
-location:String,
-rating:Number,
-experience:Number,
-description:String
+  name:{
+    type:String,
+    required:true
+  },
 
-})
+  service:{
+    type:String,
+    required:true
+  },
 
-module.exports = mongoose.model("Provider",providerSchema)
+  location:{
+    type:String
+  },
+
+  phone:{
+    type:String
+  },
+
+  description:{
+    type:String
+  },
+
+  verified:{
+    type:Boolean,
+    default:false
+  }
+
+});
+
+module.exports = mongoose.model("Provider",providerSchema);

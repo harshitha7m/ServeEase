@@ -1,13 +1,34 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema({
 
-userId:String,
-providerId:String,
-service:String,
-date:String,
-status:String
+  userId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+  },
 
-})
+  providerId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Provider"
+  },
 
-module.exports = mongoose.model("Booking",bookingSchema)
+  service:{
+    type:String
+  },
+
+  date:{
+    type:String
+  },
+
+  time:{
+    type:String
+  },
+
+  status:{
+    type:String,
+    default:"upcoming"
+  }
+
+});
+
+module.exports = mongoose.model("Booking",bookingSchema);
