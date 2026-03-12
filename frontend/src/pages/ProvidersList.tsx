@@ -3,13 +3,15 @@ import { Navbar } from "@/components/Navbar";
 import { ProviderCard } from "@/components/ProviderCard";
 import { mockProviders } from "@/data/providers";
 import { motion } from "framer-motion";
+import type { Provider } from "@/components/ProviderCard";
 
 const ProvidersList = () => {
 
   const { serviceName } = useParams();
 
   const providers = mockProviders.filter(
-    (provider) => provider.service === serviceName
+    (provider) =>
+      provider.service.toLowerCase() === serviceName?.toLowerCase()
   );
 
   return (
@@ -44,12 +46,12 @@ const ProvidersList = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {providers.map((provider, index) => (
-  <ProviderCard
-    key={provider._id}
-    provider={provider}
-    index={index}
-  />
-))}
+              <ProviderCard
+                key={provider._id}
+                provider={provider}
+                index={index}
+              />
+            ))}
 
           </div>
         )}

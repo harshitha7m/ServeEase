@@ -94,7 +94,7 @@ const Login = () => {
             </h2>
 
             <p className="font-body text-background/50 text-lg leading-relaxed">
-              Join thousands of homeowners who rely on ServiceHub to connect with verified service providers in their area.
+              Join thousands of homeowners who rely on ServeEase to connect with verified service providers in their area.
             </p>
 
           </motion.div>
@@ -118,7 +118,7 @@ const Login = () => {
               <div className="h-7 w-7 rounded-md bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-xs">S</span>
               </div>
-              ServiceHub
+              ServeEase
             </Link>
 
             <h1 className="font-headline text-2xl font-bold text-foreground">

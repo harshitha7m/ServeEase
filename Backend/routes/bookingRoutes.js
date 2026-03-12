@@ -1,24 +1,96 @@
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-const Booking = require("../models/booking")
+const Booking = require("../models/booking");
+const Provider = require("../models/provider");
 
-router.post("/", async(req,res)=>{
+/* ---------------- CREATE BOOKING ---------------- */
 
-  try{
+router.post("/", async (req, res) => {
+  try {
 
-    const booking = new Booking(req.body)
+    const { providerId, userId, date, timeSlot } = req.body;
 
-    await booking.save()
+    const provider = await Provider.findById(providerId);
 
-    res.json({message:"Booking successful"})
+    if (!provider) {
+      return res.status(404).json({ message: "Provider not found" });
+    }
 
-  }catch(err){
+    const booking = new Booking({
+      providerId,
+      userId,
+      providerName: provider.name,
+      service: provider.service,
+      date,
+      timeSlot,
+      status: "upcoming",
+    });
 
-    res.status(500).json(err)
+    await booking.save();
 
+    res.json(booking);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
+});
 
-})
+/* ---------------- GET BOOKINGS FOR USER ---------------- */
 
-module.exports = router
+router.get("/:userId", async (req, res) => {
+  try {
+
+    const bookings = await Booking.find({
+      userId: req.params.userId,
+    });
+
+    res.json(bookings);
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+/* ---------------- CANCEL BOOKING ---------------- */
+
+router.put("/cancel/:id", async (req, res) => {
+  try {
+
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status: "cancelled" },
+      { new: true }
+    );
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.json(booking);
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+/* ---------------- COMPLETE BOOKING ---------------- */
+
+router.put("/complete/:id", async (req, res) => {
+  try {
+
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status: "completed" },
+      { new: true }
+    );
+
+    res.json(booking);
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+module.exports = router;

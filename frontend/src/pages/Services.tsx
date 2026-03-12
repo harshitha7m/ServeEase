@@ -76,6 +76,23 @@ const Services = () => {
       });
   }, []);
 
+  /* ---------------- LOGIN CHECK ---------------- */
+
+  const handleServiceClick = (serviceName: string) => {
+
+    const userId = localStorage.getItem("userId");
+
+    // If user is not logged in redirect to login
+    if (!userId) {
+      alert("Please login or register to continue.");
+      navigate("/login");
+      return;
+    }
+
+    // If logged in go to providers page
+    navigate(`/providers/${encodeURIComponent(serviceName)}`);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -114,11 +131,7 @@ const Services = () => {
                 <motion.button
                   key={cat._id}
                   variants={itemVariants}
-                  onClick={() =>
-                    navigate(
-                      `/providers/${encodeURIComponent(cat.name)}`
-                    )
-                  }
+                  onClick={() => handleServiceClick(cat.name)}
                   className="group bg-card border border-border rounded-xl p-6 flex items-start gap-5 shadow-card transition-all duration-300 hover:shadow-card-hover hover:border-primary/30 hover:-translate-y-1 text-left"
                 >
                   {/* ICON */}

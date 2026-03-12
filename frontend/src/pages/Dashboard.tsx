@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 import { Navbar } from "@/components/Navbar";
 import {
   Calendar,
@@ -7,50 +10,22 @@ import {
   Star,
   TrendingUp,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
-/* ---------------- BOOKINGS TYPE ---------------- */
+/* ---------------- TYPES ---------------- */
 
 type BookingStatus = "upcoming" | "completed" | "cancelled";
 
 interface Booking {
-  id: string;
-  provider: string;
+  _id: string;
+  providerName: string;
   service: string;
   date: string;
-  time: string;
+  timeSlot: string;
   status: BookingStatus;
 }
-
-/* ---------------- SAMPLE DATA ---------------- */
-
-const bookings: Booking[] = [
-  {
-    id: "1",
-    provider: "Rajesh Kumar",
-    service: "Plumber",
-    date: "2026-03-15",
-    time: "10:00 AM",
-    status: "upcoming",
-  },
-  {
-    id: "2",
-    provider: "CoolTech Services",
-    service: "AC Repair",
-    date: "2026-03-10",
-    time: "2:00 PM",
-    status: "completed",
-  },
-  {
-    id: "3",
-    provider: "WoodCraft Studio",
-    service: "Carpenter",
-    date: "2026-03-05",
-    time: "11:00 AM",
-    status: "cancelled",
-  },
-];
 
 /* ---------------- STATUS CONFIG ---------------- */
 
@@ -93,6 +68,40 @@ const itemVariants = {
 /* ---------------- COMPONENT ---------------- */
 
 const Dashboard = () => {
+
+  const [bookings, setBookings] = useState<Booking[]>([]);
+
+  useEffect(() => {
+
+    const userId = localStorage.getItem("userId");
+
+    axios
+      .get(`http://localhost:5000/api/bookings/${userId}`)
+      .then((res) => {
+        setBookings(res.data);
+      })
+      .catch((err) => console.log(err));
+
+  }, []);
+
+  const cancelBooking = async (id: string) => {
+
+  try {
+
+    await axios.put(`http://localhost:5000/api/bookings/cancel/${id}`)
+
+    setBookings((prev) =>
+      prev.map((b) =>
+        b._id === id ? { ...b, status: "cancelled" } : b
+      )
+    )
+
+  } catch (err) {
+    console.log(err)
+  }
+
+}
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -107,10 +116,8 @@ const Dashboard = () => {
           transition={{ duration: 0.5 }}
           className="space-y-1"
         >
-          <h1 className="font-headline text-3xl md:text-4xl font-bold text-foreground">
-            Dashboard
-          </h1>
-          <p className="font-body text-muted-foreground text-lg">
+          <h1 className="text-3xl md:text-4xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground text-lg">
             Manage your bookings and account.
           </p>
         </motion.div>
@@ -126,27 +133,27 @@ const Dashboard = () => {
           {[
             {
               label: "Total Bookings",
-              value: "12",
+              value: bookings.length,
               icon: Calendar,
-              trend: "+3 this month",
+              trend: "+ bookings",
             },
             {
               label: "Completed",
-              value: "9",
+              value: bookings.filter((b) => b.status === "completed").length,
               icon: CheckCircle2,
-              trend: "75% completion",
+              trend: "Completed",
             },
             {
-              label: "Avg Rating Given",
-              value: "4.6",
-              icon: Star,
-              trend: "Above average",
+              label: "Upcoming",
+              value: bookings.filter((b) => b.status === "upcoming").length,
+              icon: Clock,
+              trend: "Upcoming",
             },
           ].map((stat) => (
             <motion.div
               key={stat.label}
               variants={itemVariants}
-              className="bg-card border border-border rounded-xl p-6 flex items-start gap-4 shadow-card hover:shadow-card-hover transition"
+              className="bg-card border rounded-xl p-6 flex items-start gap-4 shadow-card"
             >
               <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
                 <stat.icon className="h-6 w-6 text-primary" />
@@ -170,6 +177,12 @@ const Dashboard = () => {
         <div className="space-y-5">
           <h2 className="text-xl font-semibold">Recent Bookings</h2>
 
+          {bookings.length === 0 && (
+            <p className="text-muted-foreground">
+              No bookings yet.
+            </p>
+          )}
+
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -177,23 +190,26 @@ const Dashboard = () => {
             className="space-y-3"
           >
             {bookings.map((booking) => {
+
               const config = statusConfig[booking.status];
               const StatusIcon = config.icon;
 
               return (
                 <motion.div
-                  key={booking.id}
+                  key={booking._id}
                   variants={itemVariants}
-                  className="bg-card border border-border rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-card hover:shadow-card-hover transition"
+                  className="bg-card border rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-card"
                 >
                   <div className="space-y-1">
-                    <h3 className="font-bold text-base">{booking.provider}</h3>
+                    <h3 className="font-bold text-base">
+                      {booking.providerName}
+                    </h3>
 
                     <p className="text-sm text-muted-foreground">
                       <span className="text-primary font-medium">
                         {booking.service}
                       </span>{" "}
-                      • {booking.date} at {booking.time}
+                      • {new Date(booking.date).toDateString()} at {booking.timeSlot}
                     </p>
                   </div>
 
@@ -206,10 +222,14 @@ const Dashboard = () => {
                     </span>
 
                     {booking.status === "upcoming" && (
-                      <Button variant="outline" size="sm">
-                        Cancel
-                      </Button>
-                    )}
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={() => cancelBooking(booking._id)}
+  >
+    Cancel
+  </Button>
+)}
 
                     {booking.status === "completed" && (
                       <Button variant="outline" size="sm">
@@ -222,6 +242,7 @@ const Dashboard = () => {
             })}
           </motion.div>
         </div>
+
       </div>
     </div>
   );
