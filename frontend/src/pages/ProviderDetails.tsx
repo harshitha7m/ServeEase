@@ -17,11 +17,11 @@ import { mockProviders } from "@/data/providers";
 /* ---------------- TYPES ---------------- */
 
 interface RatingDistribution {
-  five: number;
-  four: number;
-  three: number;
-  two: number;
-  one: number;
+  five?: number;
+  four?: number;
+  three?: number;
+  two?: number;
+  one?: number;
 }
 
 interface Review {
@@ -35,9 +35,9 @@ interface Review {
 /* ---------------- UTILITY FUNCTIONS ---------------- */
 
 const totalRatings = (r: RatingDistribution) =>
-  r.five + r.four + r.three + r.two + r.one;
+  (r?.five || 0) + (r?.four || 0) + (r?.three || 0) + (r?.two || 0) + (r?.one || 0);
 
-const avgRating = (r: RatingDistribution) => {
+const avgRating = (r?: RatingDistribution) => {
   const total = totalRatings(r);
   if (total === 0) return 0;
 
@@ -85,7 +85,7 @@ const ProviderDetails = () => {
   const { providerId } = useParams();
   const navigate = useNavigate();
 
-  const provider = mockProviders.find((p) => p.id === providerId);
+  const provider = mockProviders.find((p) => p._id === providerId);
 
   /* ----------- PROVIDER NOT FOUND ----------- */
 
@@ -235,7 +235,7 @@ const ProviderDetails = () => {
           <div className="flex gap-3 pt-2">
             <Button
               onClick={() =>
-                navigate(`/booking/${provider.id}`)
+                navigate(`/booking/${provider._id}`)
               }
               className="gap-2"
             >

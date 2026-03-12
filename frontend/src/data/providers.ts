@@ -17,7 +17,7 @@ export const serviceCategories = [
 
 export const mockProviders: Provider[] = [
   {
-    id: "1",
+    _id: "1",
     name: "Rajesh Kumar",
     service: "Plumber",
     location: "Koramangala, Bangalore",
@@ -29,7 +29,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "2",
+    _id: "2",
     name: "Amit Sharma",
     service: "Electrician",
     location: "Indiranagar, Bangalore",
@@ -41,7 +41,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "3",
+    _id: "3",
     name: "Priya Constructions",
     service: "Painter",
     location: "HSR Layout, Bangalore",
@@ -53,7 +53,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "4",
+    _id: "4",
     name: "CoolTech Services",
     service: "AC Repair",
     location: "Whitefield, Bangalore",
@@ -65,7 +65,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "5",
+    _id: "5",
     name: "WoodCraft Studio",
     service: "Carpenter",
     location: "Jayanagar, Bangalore",
@@ -77,7 +77,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "6",
+    _id: "6",
     name: "CleanHome Services",
     service: "Cleaning",
     location: "BTM Layout, Bangalore",
@@ -89,7 +89,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "7",
+    _id: "7",
     name: "BugFree Pest Control",
     service: "Pest Control",
     location: "Marathahalli, Bangalore",
@@ -101,7 +101,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "8",
+    _id: "8",
     name: "ApplianceFix Experts",
     service: "Appliance Repair",
     location: "Electronic City, Bangalore",
@@ -113,7 +113,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "9",
+    _id: "9",
     name: "Spark Electricals",
     service: "Electrician",
     location: "Malleshwaram, Bangalore",
@@ -125,7 +125,7 @@ export const mockProviders: Provider[] = [
   },
 
   {
-    id: "10",
+    _id: "10",
     name: "PipeFix Plumbing",
     service: "Plumber",
     location: "Yelahanka, Bangalore",

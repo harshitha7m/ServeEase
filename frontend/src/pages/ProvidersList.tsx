@@ -45,7 +45,7 @@ const ProvidersList = () => {
 
             {providers.map((provider, index) => (
   <ProviderCard
-    key={provider.id}
+    key={provider._id}
     provider={provider}
     index={index}
   />

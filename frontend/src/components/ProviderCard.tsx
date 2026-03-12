@@ -14,7 +14,7 @@ interface RatingDistribution {
 }
 
 export interface Provider {
-  id: string;
+  _id: string;
   name: string;
   service: string;
   location: string;
@@ -188,7 +188,7 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate(`/provider/${provider.id}`)}
+            onClick={() => navigate(`/provider/${provider._id}`)}
           >
             <Eye className="h-3.5 w-3.5" />
             Details
@@ -201,7 +201,7 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
 
           <Button
             size="sm"
-            onClick={() => navigate(`/booking/${provider.id}`)}
+            onClick={() => navigate(`/booking/${provider._id}`)}
           >
             Book
           </Button>
@@ -209,4 +209,4 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
       </div>
     </motion.div>
   );
-} 
+}
