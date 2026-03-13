@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import axios from "axios";
+import api from "../api/axios";
 
 const Register = () => {
 
@@ -34,8 +35,8 @@ const Register = () => {
 
     try{
 
-      await axios.post(
-        "http://localhost:5000/api/auth/register",
+      await api.post(
+        "/api/auth/register",
         {
           name,
           email,

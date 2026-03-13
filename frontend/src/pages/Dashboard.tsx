@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import api from "../api/axios";
 import { Navbar } from "@/components/Navbar";
 import {
   Calendar,
@@ -75,8 +75,8 @@ const Dashboard = () => {
 
     const userId = localStorage.getItem("userId");
 
-    axios
-      .get(`http://localhost:5000/api/bookings/${userId}`)
+    api
+      .get(`/api/bookings/${userId}`)
       .then((res) => {
         setBookings(res.data);
       })
@@ -88,7 +88,7 @@ const Dashboard = () => {
 
   try {
 
-    await axios.put(`http://localhost:5000/api/bookings/cancel/${id}`)
+    await api.put(`/api/bookings/cancel/${id}`)
 
     setBookings((prev) =>
       prev.map((b) =>

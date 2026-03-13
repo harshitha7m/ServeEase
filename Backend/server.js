@@ -23,6 +23,7 @@ app.use("/api/services", require("./routes/serviceRoutes"));
 app.use("/api/providers", require("./routes/providerRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/reviews", require("./routes/reviewRoutes"));
 
 /* ---------------- TEST ROUTE ---------------- */
 

@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const bookingSchema = new mongoose.Schema({
 
 providerId:{
-type:mongoose.Schema.Types.ObjectId,
+type:String,
 ref:"Provider"
 },
 

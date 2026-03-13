@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
+import api from "../api/axios";
 
 const Login = () => {
 
@@ -25,8 +26,8 @@ const Login = () => {
 
       if(isSignup){
 
-        await axios.post(
-          "http://localhost:5000/api/auth/register",
+        await api.post(
+          "/api/auth/register",
           {
             name,
             email,
@@ -39,8 +40,8 @@ const Login = () => {
 
       }else{
 
-        const res = await axios.post(
-          "http://localhost:5000/api/auth/login",
+        const res = await api.post(
+          "/api/auth/login",
           {
             email,
             password

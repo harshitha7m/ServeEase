@@ -6,6 +6,7 @@ import { ProviderCard } from "@/components/ProviderCard";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { motion } from "framer-motion";
+import api from "../api/axios";
 
 const Providers = () => {
 
@@ -17,7 +18,7 @@ const Providers = () => {
 
   useEffect(()=>{
 
-    axios.get(`http://localhost:5000/api/providers/${decoded}`)
+    api.get(`/api/providers/${decoded}`)
     .then(res=>{
       setProviders(res.data)
     })

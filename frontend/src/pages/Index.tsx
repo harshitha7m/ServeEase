@@ -7,6 +7,7 @@ import { ProviderCard } from "@/components/ProviderCard";
 import { mockProviders, serviceCategories } from "@/data/providers";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const serviceIcons: Record<string, React.ElementType> = {
   Electrician: Zap,
@@ -249,7 +250,7 @@ const Index = () => {
           {filteredProviders.length > 0 ? (
             <div className="grid gap-4 max-w-3xl">
               {filteredProviders.map((provider, i) => (
-                <ProviderCard key={provider.id} provider={provider} index={i} />
+                <ProviderCard key={provider._id} provider={provider} index={i} />
               ))}
             </div>
           ) : (

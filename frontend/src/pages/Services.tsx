@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../api/axios";
 
 /* ---------------- TYPES ---------------- */
 
@@ -64,8 +65,8 @@ const Services = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/services")
+    api
+      .get("/api/services")
       .then((res) => {
         setServices(res.data);
         setLoading(false);

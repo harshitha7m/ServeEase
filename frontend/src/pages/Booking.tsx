@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { CalendarIcon, ArrowLeft, MapPin } from "lucide-react";
-import axios from "axios";
-
+import api from "../api/axios";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -27,8 +26,8 @@ const Booking = () => {
 
   useEffect(()=>{
 
-    axios
-      .get(`http://localhost:5000/api/providers/${providerId}`)
+    api
+      .get(`/api/providers/${providerId}`)
       .then(res=>{
         setProvider(res.data);
         setLoading(false);
@@ -43,19 +42,26 @@ const Booking = () => {
 
   const handleConfirm = async () => {
 
+    const userId = localStorage.getItem("userId");
+
+    // LOGIN CHECK
+    if(!userId){
+      toast.error("Please login to book a service");
+      navigate("/login");
+      return;
+    }
+
     if(!date || !timeSlot){
       toast.error("Please select date and time");
       return;
     }
 
-    const userId = localStorage.getItem("userId");
-
     try{
 
-      await axios.post("http://localhost:5000/api/bookings",{
+      await api.post("/api/bookings",{
         providerId,
         userId,
-        date,
+        date:date.toISOString(),
         timeSlot
       });
 
@@ -167,7 +173,6 @@ const Booking = () => {
         <Button
           className="w-full"
           onClick={handleConfirm}
-          disabled={!date || !timeSlot}
         >
           Confirm Booking
         </Button>

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Phone, MapPin, Star, ShieldCheck, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 /* ---------------- TYPES ---------------- */
 
@@ -85,6 +86,7 @@ const RatingBar = ({
 /* ---------------- COMPONENT ---------------- */
 
 export function ProviderCard({ provider, index }: ProviderCardProps) {
+
   const total = totalRatings(provider.ratings);
   const avg = avgRating(provider.ratings);
 
@@ -98,6 +100,22 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
     one: 0,
   };
 
+  /* ---------------- LOGIN CHECK ---------------- */
+
+  const handleBook = (providerId: string) => {
+
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      toast.error("Please login to book a service");
+      navigate("/login");
+      return;
+    }
+
+    navigate(`/booking/${providerId}`);
+  };
+  console.log("Provider ID:", provider._id);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -105,10 +123,12 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
       transition={{ delay: index * 0.08, duration: 0.45 }}
       className="bg-card border border-border rounded-xl p-6 space-y-5 shadow-card hover:shadow-card-hover hover:border-primary/20 transition-all"
     >
+
       {/* HEADER */}
 
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-1.5">
+
           <div className="flex items-center gap-2.5">
             <h3 className="font-headline text-lg font-bold text-card-foreground">
               {provider.name}
@@ -125,15 +145,17 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
           <p className="text-sm font-headline font-medium text-primary">
             {provider.service}
           </p>
+
         </div>
 
         <div className="text-right shrink-0 space-y-0.5">
+
           <div className="font-headline text-3xl font-bold tabular-nums">
             {avg.toFixed(1)}
           </div>
 
           <div className="flex items-center gap-0.5 justify-end">
-            {[1, 2, 3, 4, 5].map((s) => (
+            {[1,2,3,4,5].map((s)=>(
               <Star
                 key={s}
                 className={`h-3 w-3 ${
@@ -148,6 +170,7 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
           <p className="text-xs text-muted-foreground">
             {total} reviews
           </p>
+
         </div>
       </div>
 
@@ -161,12 +184,12 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
 
       <div className="space-y-1.5">
         {[
-          { stars: 5, count: ratings.five || 0 },
-          { stars: 4, count: ratings.four || 0 },
-          { stars: 3, count: ratings.three || 0 },
-          { stars: 2, count: ratings.two || 0 },
-          { stars: 1, count: ratings.one || 0 },
-        ].map((r) => (
+          { stars:5, count:ratings.five || 0 },
+          { stars:4, count:ratings.four || 0 },
+          { stars:3, count:ratings.three || 0 },
+          { stars:2, count:ratings.two || 0 },
+          { stars:1, count:ratings.one || 0 },
+        ].map((r)=>(
           <RatingBar
             key={r.stars}
             stars={r.stars}
@@ -179,34 +202,38 @@ export function ProviderCard({ provider, index }: ProviderCardProps) {
       {/* FOOTER */}
 
       <div className="flex items-center justify-between pt-3 border-t border-border">
+
         <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-          <MapPin className="h-3.5 w-3.5" />
+          <MapPin className="h-3.5 w-3.5"/>
           <span>{provider.location}</span>
         </div>
 
         <div className="flex gap-2">
+
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate(`/provider/${provider._id}`)}
           >
-            <Eye className="h-3.5 w-3.5" />
+            <Eye className="h-3.5 w-3.5"/>
             Details
           </Button>
 
           <Button variant="outline" size="sm">
-            <Phone className="h-3.5 w-3.5" />
+            <Phone className="h-3.5 w-3.5"/>
             Call
           </Button>
 
           <Button
             size="sm"
-            onClick={() => navigate(`/booking/${provider._id}`)}
+            onClick={() => handleBook(provider._id)}
           >
             Book
           </Button>
+
         </div>
       </div>
+
     </motion.div>
   );
 }
