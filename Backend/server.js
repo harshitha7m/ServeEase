@@ -7,7 +7,13 @@ const app = express();
 
 /* ---------------- MIDDLEWARE ---------------- */
 
-app.use(cors());
+// Allow requests from your Vercel frontend
+app.use(cors({
+  origin: "https://serve-ease-eosin.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.json());
 
 /* ---------------- DATABASE ---------------- */
@@ -33,7 +39,8 @@ app.get("/", (req, res) => {
 
 /* ---------------- SERVER ---------------- */
 
-const PORT = 5000;
+// Render provides its own port
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
