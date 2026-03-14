@@ -9,7 +9,7 @@ const app = express();
 
 // Allow requests from your Vercel frontend
 app.use(cors({
-  origin: "https://serve-ease-eosin.vercel.app",
+  origin: ["https://serve-ease-eosin.vercel.app", "https://serve-ease-kwdejnl7g-harshitha7m-5736s-projects.vercel.app", "http://localhost:5173"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
