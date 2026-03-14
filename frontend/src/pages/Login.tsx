@@ -86,7 +86,7 @@ const Login = () => {
               <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-lg">S</span>
               </div>
-              ServiceHub
+              ServeEase
             </Link>
 
             <h2 className="font-headline text-4xl font-bold text-background leading-tight">

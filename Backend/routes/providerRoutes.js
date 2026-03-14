@@ -7,8 +7,9 @@ const Provider = require("../models/provider")
 router.get("/service/:service", async (req, res) => {
   try {
     const service = decodeURIComponent(req.params.service)
+    const serviceRegex = new RegExp('^' + service + '$', 'i')
 
-    const providers = await Provider.find({ service })
+    const providers = await Provider.find({ service: serviceRegex })
 
     res.json(providers)
   } catch (err) {

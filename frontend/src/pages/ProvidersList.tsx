@@ -1,18 +1,58 @@
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProviderCard } from "@/components/ProviderCard";
 import { mockProviders } from "@/data/providers";
 import { motion } from "framer-motion";
 import type { Provider } from "@/components/ProviderCard";
+import api from "../api/axios";
 
 const ProvidersList = () => {
 
   const { serviceName } = useParams();
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const providers = mockProviders.filter(
-    (provider) =>
-      provider.service.toLowerCase() === serviceName?.toLowerCase()
-  );
+  useEffect(() => {
+    const fetchProviders = async () => {
+      setIsLoading(true);
+      try {
+        let dbProviders = [];
+        if (serviceName) {
+          const res = await api.get(`/api/providers/service/${encodeURIComponent(serviceName)}`);
+          dbProviders = res.data;
+        }
+
+        const filteredMocks = mockProviders.filter(
+          (provider) =>
+            provider.service.toLowerCase() === serviceName?.toLowerCase()
+        );
+
+        const combined = [...dbProviders];
+        const dbIds = new Set(dbProviders.map((p: any) => String(p._id)));
+
+        filteredMocks.forEach(mockP => {
+          if (!dbIds.has(String(mockP._id))) {
+            combined.push(mockP);
+          }
+        });
+
+        setProviders(combined);
+      } catch (err) {
+        console.error("Failed to fetch providers:", err);
+        setProviders(
+          mockProviders.filter(
+            (provider) =>
+              provider.service.toLowerCase() === serviceName?.toLowerCase()
+          )
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProviders();
+  }, [serviceName]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -38,7 +78,11 @@ const ProvidersList = () => {
 
         {/* PROVIDERS GRID */}
 
-        {providers.length === 0 ? (
+        {isLoading ? (
+          <p className="text-muted-foreground animate-pulse">
+            Loading providers...
+          </p>
+        ) : providers.length === 0 ? (
           <p className="text-muted-foreground">
             No providers available for this service.
           </p>

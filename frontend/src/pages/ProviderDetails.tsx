@@ -295,9 +295,15 @@ const ProviderDetails = () => {
 
           <div className="flex gap-3 pt-2">
             <Button
-              onClick={() =>
-                navigate(`/booking/${provider._id}`)
-              }
+              onClick={() => {
+                const userId = localStorage.getItem("userId");
+                if (!userId) {
+                  toast.error("Please login to book a service");
+                  navigate("/login");
+                  return;
+                }
+                navigate(`/booking/${provider._id}`);
+              }}
               className="gap-2"
             >
               <Calendar className="h-4 w-4" />

@@ -26,6 +26,13 @@ const Booking = () => {
 
   useEffect(()=>{
 
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      toast.error("Please login to book a service");
+      navigate("/login");
+      return;
+    }
+
     api
       .get(`/api/providers/${providerId}`)
       .then(res=>{
@@ -38,7 +45,7 @@ const Booking = () => {
         setLoading(false);
       });
 
-  },[providerId]);
+  },[providerId, navigate]);
 
   const handleConfirm = async () => {
 

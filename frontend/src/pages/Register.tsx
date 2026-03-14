@@ -85,7 +85,7 @@ const Register = () => {
               <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-lg">S</span>
               </div>
-              ServiceHub
+              ServEase
             </Link>
 
             <h2 className="font-headline text-4xl font-bold text-background leading-tight">
@@ -134,7 +134,7 @@ const Register = () => {
               <div className="h-7 w-7 rounded-md bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-xs">S</span>
               </div>
-              ServiceHub
+              ServEase
             </Link>
 
             <h1 className="font-headline text-2xl font-bold text-foreground">
