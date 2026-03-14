@@ -8,9 +8,17 @@ const app = express();
 /* ---------------- MIDDLEWARE ---------------- */
 
 // Allow requests from your Vercel frontend
+
 app.use(cors({
-  origin: ["https://serve-ease-eosin.vercel.app", "https://serve-ease-kwdejnl7g-harshitha7m-5736s-projects.vercel.app", "http://localhost:5173"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: function (origin, callback) {
+    // Allow any localhost, any vercel.app domain, or requests with no origin (like mobile apps/curl)
+    if (!origin || origin.startsWith('http://localhost') || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));
 
